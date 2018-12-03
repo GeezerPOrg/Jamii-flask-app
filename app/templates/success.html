@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+<div class="content-bs">
+<h1>Here are all the Businesses available in Jamii Area</h1>
+{% for business in businesses%}
+<div class="jumbotron">
+<h3>Business Name: {{ business.name }}</h3><br>
+<h3>Located at: {{ business.location }}</h3><br>
+<h3>Started operating on: {{ business.started }}</h3><br>
+<h4 class="below-desc">Description about the business: {{ business.business_description }}</h4><br>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+<div class="content-bs">
+<div class="jumbotron">
+<h1>Here is the information about the business you are looking for business you are looking for</h1><br>
+<h2> Name of business: {{ business.name }}</h2><br>
+<h3>Location: {{ business.location }}</h3><br>
+<h3>Date started: {{ business.started }}</h3><br>
+<h4>Business description: {{ business.business_description }}</h4>
+</div>
+</div>
+{% endblock %}
