@@ -7,11 +7,17 @@
 {% block content %}
 <div class="content-bs">
 <div class="jumbotron">
-<h1>Here is the information about the business you are looking for business you are looking for</h1><br>
+<h1>Here is the information about the business you are looking for</h1><br>
 <h2> Name of business: {{ business.name }}</h2><br>
 <h3>Location: {{ business.location }}</h3><br>
 <h3>Date started: {{ business.started }}</h3><br>
 <h4>Business description: {{ business.business_description }}</h4>
+{% if business.owner == current_user %}
+<div>
+  <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('update_business', business_id = business.id) }}">Update</a>
+  <button type="button" class="btn btn-danger btn-sm m-1" data-toggle = "modal" data-target = "#deleteModal">Delete</button>
+</div>
+{% endif %}
 </div>
 </div>
 {% endblock %}

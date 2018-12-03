@@ -41,19 +41,19 @@ def login():
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title = 'login', form = form)
 
-#logout 
+#logout
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('home'))
 
-#register business route
+#create business route
 @app.route('/businesses', methods = ['GET', 'POST'])
 @login_required
 def businesses():
     form = BusinessesForm()
     if form.validate_on_submit():
-        business = Businesses(name = form.name.data, location = form.location.data,
+        business = Businesses(name = form.name.data, owner = current_user, location = form.location.data,
             started = form.date.data, business_description = form.business_description.data )
         db.session.add(business)
         db.session.commit()
@@ -61,7 +61,7 @@ def businesses():
         return redirect(url_for('available'))
     else:
         flash('Your business not registered please check on your details and try again', 'danger')
-    return render_template('business.html', title = 'Business', form = form)
+    return render_template('business.html', title = 'Business', form = form, legend = 'Register Business', btn = 'Register')
 
 #route that display all registered businesses
 @app.route('/available-business')
@@ -70,18 +70,20 @@ def available():
     return render_template('success.html', businesses = businesses)
 
 #route that get business by id
-@app.route('/businesses/<int:id>')
+@app.route('/businesses/<int:business_id>')
 @login_required
-def single_business(id):
-    business = Businesses.query.get_or_404(id)
+def single_business(business_id):
+    business = Businesses.query.get_or_404(business_id)
     return render_template('bs.html', business = business)
 
 
-#route update a business
-@app.route('/business-update/<int:business_id>', methods = ['POST', 'GET'])
+#update a business route
+@app.route('/businesses/<int:business_id>/update', methods = ['POST', 'GET'])
 @login_required
 def update_business(business_id):
     business = Businesses.query.get_or_404(business_id)
+    if business.owner != current_user:
+        abort(403)
     form = BusinessesForm()
     if form.validate_on_submit():
         business.name = form.name.data
@@ -89,8 +91,12 @@ def update_business(business_id):
         business.business_description = form.business_description.data
         db.session.commit()
         flash(f'Your business has been updated', 'success')
-        return redirect(url_for('available', business_id = Businesses.id))
-    return render_template('business.html', title = 'update', form = form)
+        return redirect(url_for('single_business', business_id = business.id))
+    elif request.method == 'GET':
+        form.name.data = business.name
+        form.location.data = business.location
+        form.business_description.data = business.business_description
+    return render_template('business.html', title = 'update', form = form, legend = 'Update Business', btn = 'Update')
 
 #route to delete a business
 @app.route('/business-delete/<int:business_id>', methods = ['GET', 'POST'])

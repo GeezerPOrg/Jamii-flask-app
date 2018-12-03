@@ -38,7 +38,7 @@ class BusinessesForm(FlaskForm):
     date = DateField('Start date', default = date.today(), format = '%d/%m/%Y',
             validators = [DataRequired(message = 'You need to enter the start date')])
     business_description = TextAreaField('Give the discription of your business')
-    submit = SubmitField('Register business')
+    submit = SubmitField('Submit')
 
     def validate_business(self, name):
         business = Businesses.query.filter_by(name = form.name.data).first()

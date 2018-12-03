@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(20))
     email = db.Column(db.String(60), unique = True)
     password_hash = db.Column(db.String(120))
+    businesses = db.relationship('Businesses', backref = 'owner', lazy = True)
 
     def __repr__(self):
         return f'User {self.username}'
@@ -41,6 +42,7 @@ class Businesses(db.Model):
     location = db.Column(db.String())
     started = db.Column(db.DateTime(), default = datetime.utcnow)
     business_description = db.Column(db.String())
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
 
 
 
