@@ -13,8 +13,3 @@ class TestViews(unittest.TestCase):
         with app.test_client() as c:
             resp = c.get('/available-business')
             self.assertEqual(resp.status_code, 200)
-
-    def test_register_business(self):
-        with app.test_client as c:
-            resp = c.get('/logout')
-            self.assertEqual(resp.status_code, 200)
