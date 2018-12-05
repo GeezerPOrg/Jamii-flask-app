@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
-from app.models.models import User, Businesses
+from app.models.models import User, Businesses, Review
 from datetime import date
 
 #register form
@@ -40,13 +40,9 @@ class BusinessesForm(FlaskForm):
     business_description = TextAreaField('Give the discription of your business')
     submit = SubmitField('Submit')
 
-    def validate_business(self, name):
-        business = Businesses.query.filter_by(name = form.name.data).first()
-        if business:
-            raise ValidationError('Business already registered')
 
-
-#delete bs form
-class DeleteBusiness(FlaskForm):
-    id = IntegerField("Provide ID for your Business", validators = [DataRequired()])
-    submit = SubmitField('Delete Business')
+#review form
+class ReviewForm(FlaskForm):
+    review_headline = StringField('Review Headline', validators = [DataRequired()])
+    comment = TextAreaField('Comment', validators = [DataRequired()])
+    submit = SubmitField('Leave a Comment')

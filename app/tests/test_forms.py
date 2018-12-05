@@ -1,5 +1,5 @@
 import unittest
-from app.forms.forms import LoginForm, RegisterForm, BusinessesForm, DeleteBusiness
+from app.forms.forms import LoginForm, RegisterForm, BusinessesForm
 
 class TestForm(unittest.TestCase):
     def setUp(self):

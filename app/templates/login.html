@@ -4,7 +4,8 @@
         <form method="POST" action="" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4" id ="register-title">Please Log In</legend>
+                <img class="login-logo" src="https://cdn3.iconfinder.com/data/icons/essential-rounded/64/Rounded-31-512.png" class="center" alt="login-logo">
+                <legend class="border-bottom mb-4" id ="register-title">Enter your credentials to login</legend>
                 <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}
                     {% if form.email.errors %}

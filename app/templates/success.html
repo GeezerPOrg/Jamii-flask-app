@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="content-bs">
-<h1>Here are all the Businesses available in Jamii Area</h1>
+<h1>Businesses in Jamii Area</h1>
 {% for business in businesses%}
 <div class="jumbotron">
 <h3><a href="{{ url_for('single_business', business_id = business.id) }}">Business Name: {{ business.name }}</a></h3><br>

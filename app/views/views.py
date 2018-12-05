@@ -1,8 +1,8 @@
 from flask import render_template, flash, url_for, redirect, request, abort
 from app import app, db
-from app.forms.forms import RegisterForm, LoginForm, BusinessesForm, DeleteBusiness
+from app.forms.forms import RegisterForm, LoginForm, BusinessesForm, ReviewForm
 from flask_login import login_user, logout_user, current_user, login_required
-from app.models.models import User, Businesses
+from app.models.models import User, Businesses, Review
 
 
 
@@ -99,13 +99,31 @@ def update_business(business_id):
     return render_template('business.html', title = 'update', form = form, legend = 'Update Business', btn = 'Update')
 
 #route to delete a business
-@app.route('/business-delete/<int:business_id>', methods = ['GET', 'POST'])
+@app.route('/business-delete/<int:business_id>', methods = ['POST'])
 @login_required
 def deletebusiness(business_id):
-    form = DeleteBusiness()
+    business = Businesses.query.get_or_404(business_id)
+    db.session.delete(business)
+    db.session.commit()
+    flash('Your business has been deleted', 'success')
+    return redirect(url_for('available'))
+
+
+#route to post a review
+@app.route('/businesses/<int:business_id>/review', methods = ['GET', 'POST'])
+@login_required
+def review(business_id):
+    form = ReviewForm()
+    business = Businesses.query.get_or_404(business_id)
     if form.validate_on_submit():
-        business = Businesses.query.get_or_404(business_id)
-        db.session.delete(business)
+        review = Review(review_headline = form.review_headline.data,comment = form.comment.data )
+        db.session.add(review)
         db.session.commit()
-        flash('Your business has been deleted', 'success')
-    return render_template('delete.html', form = form)
+        flash('Thank you for your feedback')
+        return redirect(url_for('get_review', business_id = business.id))
+    return render_template('review.html', form = form)
+#route to get all reviews
+@app.route('/businesses/<int:business_id>/reviews')
+def get_review(business_id):
+    reviews = Review.query.get_or_404(business_id)
+    return render_template('all_reviews.html', reviews = reviews)
